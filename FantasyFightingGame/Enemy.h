@@ -8,26 +8,27 @@
 using namespace std;
 
 //enemy inheriting from entity
-class Enemy : Entity {
+class Enemy : public Entity {
 private: 
 	double goldDropChance, maxGoldDrop;
 public:
 	//setting all of the enemy's values. 
-	Enemy() {
-		setDamage(2);
-		setArmor(0);
-		setHp(10);
-		setMaxHp(10);
-		goldDropChance = 5;//1 / (9-GDC) chance (if 9, 100% chance) (25% here)
-		maxGoldDrop = 50;
+	Enemy(double d = 2, double a = 0, double health = 10, double maxHealth = 10, double gdc = 3, double mgd = 20) : Entity(d, a, health, maxHealth) {
+		setDamage(d);
+		setArmor(a);
+		setHp(health);
+		setMaxHp(maxHealth);
+		goldDropChance = gdc;//1 / (9-GDC) chance (if 9, 100% chance) (17% here)
+		maxGoldDrop = mgd;
 		srand(time(NULL));
 	}
 
-	//getters and setters
+	//getters and setters specific to enemy
 	double getGoldDropChance() const { return goldDropChance; }
 	double getMaxGoldDrop() const { return maxGoldDrop; }
 	void setGoldDropChance(double GDC) { goldDropChance = GDC; }
 	void setMaxGoldDrop(double MGD) { maxGoldDrop = MGD; }
+
 
 	//other functions
 	double goldDropped() {

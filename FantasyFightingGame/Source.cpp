@@ -14,6 +14,7 @@ using namespace std;
 int main() {
 	//testing display functions for enemy, boss, and hero within game
 	Game g;
-	g.displayAll();
+	//g.displayAll();
+	g.welcomeScreen();
 	return 0;
 }

@@ -7,23 +7,23 @@
 using namespace std;
 
 //boss inheriting from entity
-class Boss : Entity {
+class Boss : public Entity {
 private:
 	int level;
 	double gold, hpRegen;
 public:
 	//setting all of the boss' values.
-	Boss() {
-		setDamage(7);
-		setArmor(5);
-		setHp(25);
-		setMaxHp(25);
-		level = 1;
-		gold = 100;
-		hpRegen = 5;
+	Boss(double d = 7, double a = 5, double health = 25, double maxHealth = 25, int l = 1, double g = 100, double hpr = 5) : Entity(d, a, health, maxHealth) {
+		setDamage(d);
+		setArmor(a);
+		setHp(health);
+		setMaxHp(maxHealth);
+		level = l;
+		gold = g;
+		hpRegen = hpr;
 	} 
-	
-	//getters and setters
+
+	//getters and setters specific to Boss
 	int getLevel() const { return level; }
 	double getGold() const { return gold; }
 	double getHpRegen() const { return hpRegen; }

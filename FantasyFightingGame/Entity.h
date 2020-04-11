@@ -6,11 +6,11 @@ class Entity {
 private:
 	double damage, armor, hp, maxHp;
 public:
-	Entity() {
-		damage = 0;
-		armor = 0;
-		hp = 0;
-		maxHp = 0;
+	Entity(double d = 0, double a = 0, double health = 0, double maxHealth = 0) {
+		damage = d;
+		armor = a;
+		hp = health;
+		maxHp = maxHealth;
 	}
 
 	//setters and getters

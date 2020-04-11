@@ -7,24 +7,24 @@
 using namespace std;
 
 //hero inheriting from entity
-class Hero : Entity {
+class Hero : public Entity {
 private:
 	string name;
 	int level;
 	double critChance, critMult, healing, gold;
 public:
 	//Setting the Hero's stats. 
-	Hero() {
-		setDamage(4);
-		setArmor(0);
-		setHp(15);
-		setMaxHp(15);
-		name = "Phil";
-		level = 1;
-		critChance = 0.0;
-		critMult = 2;
-		healing = 5;
-		gold = 0;
+	Hero(double d = 5, double a = 0, double health = 15, double maxHealth = 15, string n = "Phil", int l = 1, double cc = 0, double cm = 2, double heal = 5, double g = 0) : Entity(d, a, health, maxHealth) {
+		setDamage(d);
+		setArmor(a);
+		setHp(health);
+		setMaxHp(maxHealth);
+		name = n;
+		level = l;
+		critChance = cc;
+		critMult = cm;
+		healing = heal;
+		gold = g;
 	}
 
 	//setters and getters... so many setters and getters...
@@ -42,7 +42,19 @@ public:
 	void setName(string n) { name = n; }
 
 	//other functions 
-	void levelUp() { level++; }
+	void levelUp() {
+		level++;
+		//30% increase to damage, 20% on everything else (with an extra +1 each level on armor to allow initial growth)
+		setDamage(floor(getDamage() * 1.3));
+		if (getArmor() < 5) {
+			setArmor(getArmor() + 1);
+		}
+		else {
+			setArmor(floor(getArmor() * 1.2));
+		}
+		setMaxHp(floor(getMaxHp() * 1.2));
+		setHp(getMaxHp());
+	}
 
 	//polymorphic display function
 	virtual void displayStats() {
