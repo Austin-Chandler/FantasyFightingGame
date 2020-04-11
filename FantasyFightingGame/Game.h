@@ -49,7 +49,12 @@ public:
 	}
 
 	bool isWinner() {
-		return false;
+		if (boss.getLevel() == 11) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	void main() {
@@ -62,24 +67,78 @@ public:
 				cin >> input;
 			}
 			if (input == "s") {
-				cout << "Shop" << endl;
+				cout << "You went to the shop" << endl;
 			}
 			else if (input == "f") {
-				cout << "Forest" << endl;
+				cout << "You headed into the forest to slay some baddies" << endl;
+				forest();
 			}
 			else if (input == "b") {
-				cout << "Boss" << endl;
+				cout << "You went deep into the dangerous cave to find a big baddie" << endl;
 			}
 			else if (input == "save") {
-				cout << "Save" << endl;
+				cout << "Saved" << endl;
 			}
 			else if (input == "stats") {
-				cout << "Stats" << endl;
+				displayAll();
 			}
 			else if (input == "e") {
 				cout << "Exit" << endl;
 			}
 		} while (input != "e" && !isWinner());
+	}
+
+	void forest() {
+		char input = ' ';
+		do {
+			enemy.displayStats();
+			hero.displayStats();
+			cout << "What would you like to do: Run [leave the forest] (r), Attack (a), or Heal yourself (h)?" << endl;
+			cin >> input;
+			while (input != 'r' && input != 'a' && input != 'h') {
+				cout << "Please enter r, a, or h (case sensitive): ";
+				cin >> input;
+			}
+			if (input == 'r') {												//run 
+				cout << "You left the forest." << endl;
+			}
+			else if (input == 'a') {										//attack
+				enemy.setHp(enemy.getHp() - (hero.getDamage() - enemy.getArmor()));
+				cout << "You attacked the baddie for " << (hero.getDamage() - enemy.getArmor()) << " damage!" << endl;
+				if (enemy.getHp() <= 0) {
+					cout << "You defeated the baddie!" << endl << endl;
+					for (int i = 0; i < 1; i++) {							//****change 1 (i < 1) to variable that holds level up repition****
+						hero.levelUp();
+						cout << "You leveled up!" << endl;
+					}
+					resetEnemy();
+				}
+				else {
+					hero.setHp(hero.getHp() - (enemy.getDamage() - hero.getArmor()));
+					cout << "The baddie attacked you for " << (enemy.getDamage() - hero.getArmor()) << " damage!" << endl;
+					if (hero.getHp() <= 0) {
+						cout << "You were defeated by enemy" << endl;
+						input = 'r';
+					}
+				}
+			}
+			else if (input == 'h') {										//heal
+				double holdHealth;
+				holdHealth = hero.getHp();
+				hero.setHp(hero.getHp() + hero.getHeal());
+				if (hero.getHp() > hero.getMaxHp()) {
+					hero.setHp(hero.getMaxHp());
+				}
+				cout << "You healed yourself for " << (hero.getHp() - holdHealth) << " health points!" << endl;
+				hero.setHp(hero.getHp() - (enemy.getDamage() - hero.getArmor()));
+				cout << "The baddie attacked you for " << (enemy.getDamage() - hero.getArmor()) << " damage!" << endl;
+				if (hero.getHp() <= 0) {
+					cout << "You were defeated by enemy" << endl << endl;
+					input = 'r';
+				}
+			}
+		} while (input != 'r');
+
 	}
 
 	void resetEnemy() {
