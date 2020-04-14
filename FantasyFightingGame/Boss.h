@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -32,7 +33,23 @@ public:
 	void setHpRegen(double hpr) { hpRegen = hpr; }
 
 	//other functions
-	void levelUp() { level++; }
+	void levelUp() {
+		level++;
+		setDamage(floor(pow(2, (level - 1)) * 7));
+		setArmor(floor(pow(2, (level - 1)) * 5));
+		setMaxHp(floor(pow(2, (level - 1)) * 25));
+		gold = floor(pow(1.5, (level - 1)) * 100);
+		hpRegen = floor(pow(2, (level - 1)) * 5);
+	} 
+
+	//This will be used if the player loads in a character 
+	void refresh() {
+		setDamage(floor(pow(2, (level - 1)) * 7));
+		setArmor(floor(pow(2, (level - 1)) * 5));
+		setMaxHp(floor(pow(2, (level - 1)) * 25));
+		gold = floor(pow(1.5, (level - 1)) * 100);
+		hpRegen = floor(pow(2, (level - 1)) * 5);
+	}
 
 	//polymorphic display function
 	virtual void displayStats() {

@@ -42,18 +42,12 @@ public:
 	void setName(string n) { name = n; }
 
 	//other functions 
-	void levelUp() {
-		level++;
+	//This will be used if the player loads in a character 
+	void refresh() {
 		//30% increase to damage, 20% on armor and maxHp (with an extra +1 each level on armor to allow initial growth), Crit chance/mult and healing are upgraded in the shop
-		setDamage(floor(getDamage() * 1.3));
-		if (getArmor() < 5) {
-			setArmor(getArmor() + 1);
-		}
-		else {
-			setArmor(floor(getArmor() * 1.2));
-		}
-		setMaxHp(floor(getMaxHp() * 1.2));
-		//setHp(getMaxHp());
+		setDamage(floor(pow(1.3, (level - 1)) * 5));
+		setArmor(floor(pow(1.2, (level - 1)) * 2));
+		setMaxHp(floor(pow(1.2, (level - 1)) * 15));
 	}
 
 	//polymorphic display function

@@ -16,6 +16,9 @@ private:
 	Enemy enemy;
 	Boss boss;
 	Hero hero;
+
+	//other vars
+	double lvlMult = 1;
 public:
 	Game() {
 		srand(time(NULL));
@@ -147,7 +150,7 @@ public:
 			else if (input == 'a') {										//attack
 				if ((rand() % 100) <= (hero.getCritChance() * 100)) {													//to find crit chance get a random number 0 - 99 if it is less than cc * 100 its a crit hit. 
 					enemy.setHp(enemy.getHp() - ((hero.getDamage() * hero.getCritMult()) - enemy.getArmor()));			//(8 <= 10) 8 is from rand()%100 10 is an example .1 crit chance * 100
-					cout << "You attacked the baddie for " << ((hero.getDamage() * hero.getCritMult()) - enemy.getArmor()) << " damage!" << endl;
+					cout << "You attacked the baddie for a critical " << ((hero.getDamage() * hero.getCritMult()) - enemy.getArmor()) << " damage!" << endl;
 				}
 				else {
 					enemy.setHp(enemy.getHp() - (hero.getDamage() - enemy.getArmor()));
@@ -155,9 +158,8 @@ public:
 				}
 				if (enemy.getHp() <= 0) {
 					cout << "You defeated the baddie!" << endl << endl;
-					for (int i = 0; i < 1; i++) {							//****change 1 (i < 1) to variable that holds level up repition****
-						hero.levelUp();
-					}
+					hero.setLevel(hero.getLevel() + lvlMult);
+					hero.refresh();
 					cout << "You leveled up! You are now level " << hero.getLevel() << "!" << endl;
 					hero.setGold(hero.getGold() + enemy.goldDropped());
 					resetEnemy();
@@ -226,12 +228,12 @@ public:
 				if (boss.getHp() <= 0) {
 					cout << "You defeated the boss!" << endl;
 					cout << "The boss leveled up! He is now level " << (boss.getLevel() + 1) << "!" << endl << endl;
-					for (int i = 0; i < 1; i++) {							//****change 1 (i < 1) to variable that holds level up repition****
-						hero.levelUp();
-					}
-					cout << "You leveled up!" << endl;
+					hero.setLevel(hero.getLevel() + lvlMult);
+					hero.refresh();
+					cout << "You leveled up! You are now level " << hero.getLevel() << "!" << endl;
 					hero.setGold(hero.getGold() + boss.getGold());
-					boss.levelUp();
+					boss.setLevel(boss.getLevel() + 1);
+					boss.refresh();
 				}
 				else {
 					boss.setHp(boss.getHp() + boss.getHpRegen());
@@ -282,17 +284,6 @@ public:
 		if (hero.getLevel() % 10 == 0) { //every 10 hero levels increase the gold drop chance chance from the enemy
 			enemy.setGoldDropChance(enemy.getGoldDropChance() + 1);
 		}
-	}
-
-
-
-	void testLevel() {
-		for (int i = 0; i < 1; i++) {					//Add this bit later to the end of forest() but change 1 (i < 1) to variable that holds level up repition 
-			hero.levelUp();
-		}
-		resetEnemy();
-		hero.displayStats();
-		enemy.displayStats();
 	}
 
 
