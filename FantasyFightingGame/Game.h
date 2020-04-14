@@ -10,6 +10,33 @@
 
 using namespace std;
 
+/*
+Things Done:
+	Welcome
+	Storyline 
+	Main loop input (action selector) 
+	Forest
+	Boss
+	Stats
+	isWinner()
+	Gold functionality
+	Level functionality
+Things left to do:
+	Neccesary ASAP:
+		Shop
+		Save
+		Load player
+		Victory message when 10 bosses beaten
+		Create New Character 
+	Neccesary When all else is done:
+		Squash bugs
+		Patch it all together to make a cohesive game :)
+	Non-neccisities:
+		Help (if time)
+		Map
+		Extra story with some bosses
+*/
+
 class Game {
 private:
 	//composing game of an enemy, a boss, and a hero
