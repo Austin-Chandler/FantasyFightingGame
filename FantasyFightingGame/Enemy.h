@@ -48,7 +48,7 @@ public:
 	//polymorphic display function
 	virtual void displayStats() {
 		cout << "Enemy stats: " << endl;
-		cout << "Damage: " << getDamage() << ", Armor: " << getArmor() << ", Health: " << getHp() << "/" << getMaxHp() << ", Max possible gold: " << maxGoldDrop << endl;
+		cout << "\tDamage: " << getDamage() << ", Armor: " << getArmor() << ", Health: " << getHp() << "/" << getMaxHp() << ", Max possible gold: " << maxGoldDrop << endl;
 	}
 };
 

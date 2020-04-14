@@ -33,16 +33,7 @@ public:
 	void setHpRegen(double hpr) { hpRegen = hpr; }
 
 	//other functions
-	void levelUp() {
-		level++;
-		setDamage(floor(pow(2, (level - 1)) * 7));
-		setArmor(floor(pow(2, (level - 1)) * 5));
-		setMaxHp(floor(pow(2, (level - 1)) * 25));
-		gold = floor(pow(1.5, (level - 1)) * 100);
-		hpRegen = floor(pow(2, (level - 1)) * 5);
-	} 
-
-	//This will be used if the player loads in a character 
+	//level changes and loading in a level
 	void refresh() {
 		setDamage(floor(pow(2, (level - 1)) * 7));
 		setArmor(floor(pow(2, (level - 1)) * 5));
@@ -54,7 +45,7 @@ public:
 	//polymorphic display function
 	virtual void displayStats() {
 		cout << "Boss stats: " << endl;
-		cout << "Level: " << level << ", Damage: " << getDamage() << ", Armor: " << getArmor();
+		cout << "\tLevel: " << level << ", Damage: " << getDamage() << ", Armor: " << getArmor();
 		cout << ", Health: " << getHp() << "/" << getMaxHp() << ", Health regeneration: " << hpRegen << ", Gold: " << gold << endl;
 	}
 };

@@ -12,9 +12,6 @@
 using namespace std;
 
 int main() {
-	//testing stuff
-	//system("color %");
-	Game g;
-	g.main();
-	return 0;
+	Game SannhetsLegacy;
+	SannhetsLegacy.playGame();
 }

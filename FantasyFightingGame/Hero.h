@@ -42,18 +42,18 @@ public:
 	void setName(string n) { name = n; }
 
 	//other functions 
-	//This will be used if the player loads in a character 
+	//level changes and loading in a level
 	void refresh() {
-		//30% increase to damage, 20% on armor and maxHp (with an extra +1 each level on armor to allow initial growth), Crit chance/mult and healing are upgraded in the shop
+		//30% increase to damage and maxHp, 20% on armor, Crit chance/mult and healing are upgraded in the shop
 		setDamage(floor(pow(1.3, (level - 1)) * 5));
 		setArmor(floor(pow(1.2, (level - 1)) * 2));
-		setMaxHp(floor(pow(1.2, (level - 1)) * 15));
+		setMaxHp(floor(pow(1.3, (level - 1)) * 15));
 	}
 
 	//polymorphic display function
 	virtual void displayStats() {
 		cout << name << "'s stats:" << endl;
-		cout << "Level: " << level << ", Damage: " << getDamage() << ", Armor: " << getArmor();
+		cout << "\tLevel: " << level << ", Damage: " << getDamage() << ", Armor: " << getArmor();
 		cout << ", Health: " << getHp() << "/" << getMaxHp() << ", Healing: " << healing << ", Critical Chance: ";
 		cout << critChance << ", Critical Multiplier: " << critMult << ", Gold: " << gold << endl;
 	}
