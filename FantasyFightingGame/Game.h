@@ -115,6 +115,7 @@ public:
 
 	bool isWinner() {
 		if (boss.getLevel() == 11) {
+			system("color 80");
 			cout << "Congradualtions! You have defeated Bedrageri and restored the world to its former prowess!" << endl;
 			save();
 			return true;
@@ -226,7 +227,7 @@ public:
 			}
 			else if (input == '2') {
 				if (hero.getGold() >= (critCLvl * 30)) {
-					if (critCLvl == 10) { //This stops crit chance at 50% 
+					if (critCLvl == 11) { //This stops crit chance at 50% 
 						cout << "Sorry! I'm all out!" << endl << endl;
 					}
 					else {
@@ -535,7 +536,7 @@ public:
 		}
 
 		output.close();
-
+		cout << "Saved the game" << endl;
 	}
 
 
@@ -568,10 +569,10 @@ public:
 
 		lvlMult = lm;
 		critCLvl = ccl;
-		critCLvl = cml;
+		critMLvl = cml;
 		healLvl = healLevel;
 		hero.setCritChance(0.05 * (critCLvl - 1));
-		hero.setCritMult((.3 * (critCLvl - 1)) + 2);
+		hero.setCritMult((.3 * (critMLvl - 1)) + 2);
 		hero.setHeal((5 * (healLvl - 1)) + 5);
 	}
 
