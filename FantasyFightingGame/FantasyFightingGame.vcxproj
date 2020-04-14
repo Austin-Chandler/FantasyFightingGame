@@ -145,7 +145,11 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameInfo.h" />
     <ClInclude Include="Hero.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="File.in" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

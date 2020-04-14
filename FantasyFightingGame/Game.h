@@ -4,9 +4,12 @@
 #include "Enemy.h"
 #include "Boss.h"
 #include "Hero.h"
+#include "GameInfo.h"
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <string.h>
+#include<vector>
 
 using namespace std;
 
@@ -24,10 +27,10 @@ Things Done:
 	Shop
 	Create new character
 	Victory message when 10 bosses beaten
+	Load player
+	Save
 Things left to do:
 	Neccesary ASAP:
-		Save
-		Load player
 	Neccesary when all else is done:
 		Squash bugs
 		Patch it all together to make a cohesive game :)
@@ -58,8 +61,14 @@ public:
 
 	void playGame() {
 		if (welcomeScreen()) {
-			//load player
-			refreshAll();
+			loadPlayer();
+			if (hero.getName() == "Phil") {
+				string n;
+				cout << "Please enter a name for your player: ";
+				cin >> n;
+				hero.setName(n);
+				storyline();
+			}
 		}
 		else {
 			string n;
@@ -107,7 +116,7 @@ public:
 	bool isWinner() {
 		if (boss.getLevel() == 11) {
 			cout << "Congradualtions! You have defeated Bedrageri and restored the world to its former prowess!" << endl;
-			//save in here before the game closes to allow for people to keep playing later if they desire
+			save();
 			return true;
 		}
 		else {
@@ -163,7 +172,7 @@ public:
 
 			//save
 			else if (input == "save") {
-				cout << "Saved" << endl;
+				save();
 			}
 
 			//stats
@@ -181,7 +190,7 @@ public:
 				}
 				if (input == "Y" || input == "y") {
 					cout << "You saved the game" << endl;
-					//save here
+					save();
 					input = "e";
 				}
 				else if (input == "N" || input == "n") {
@@ -422,6 +431,115 @@ public:
 
 
 
+	void loadPlayer() {
+		//creat object to read file
+		ifstream fin("File.in");
+
+		//make sure fin is initialized to the file
+		if (!fin) {
+			cerr << "File not found" << endl;
+			exit(1);
+		}
+
+		string heroName;
+		double lm, ccl, cml, healLevel, bl, hl, g;
+
+		bool loaded = false;
+
+		char input = ' ';
+		do {
+			while (fin >> heroName >> lm >> ccl >> cml >> healLevel >> bl >> hl >> g) {
+				cout << "Would you like to load " << heroName << "? (Y/N) ";
+				cin >> input;
+				while (input != 'Y' && input != 'y' && input != 'N' && input != 'n') {
+					cout << "Please enter Y or N: ";
+					cin >> input;
+				}
+				if (input == 'Y' || input == 'y') {
+					cout << endl << "You loaded " << heroName << endl;
+					refreshAll(heroName, lm, ccl, cml, healLevel, bl, hl, g);
+					loaded = true;
+					break;
+				}
+				else if (input == 'N' || input == 'n') {
+					cout << heroName << " was not loaded" << endl;
+				}
+			}
+			if (!loaded) {
+				cout << "No players were loaded. Would you like to create one? (No forces quit) (Y/N) ";
+				cin >> input;
+				if (input == 'N' || input == 'n') {
+					cerr << "No player loaded or created. Force quit" << endl;
+					exit(2);
+				}
+			}
+			else {
+				input = 'y';
+			}
+		} while (input != 'Y' && input != 'y');
+	}
+
+
+
+	void save() {
+		//file stream object to read file into a vector
+		ifstream input;
+		input.open("File.in");
+
+		string heroName;
+		double lm, ccl, cml, healLevel, bl, hl, g;
+		bool reset = false;
+
+		//make vector of GameInfos
+		vector<GameInfo*> saves;
+
+		while (input >> heroName >> lm >> ccl >> cml >> healLevel >> bl >> hl >> g) {
+			GameInfo* currSave = new GameInfo(heroName, lm, ccl, cml, healLevel, bl, hl, g);
+			saves.push_back(currSave);
+		}
+
+		//updating the character if they exist
+		for (int i = 0; i < saves.size(); i++) {
+			if (saves[i]->getName() == hero.getName()) {
+				saves[i]->setLM(lvlMult);
+				saves[i]->setCCL(critCLvl);
+				saves[i]->setCML(critMLvl);
+				saves[i]->setHealLevel(healLvl);
+				saves[i]->setBL(boss.getLevel());
+				saves[i]->setHL(hero.getLevel());
+				saves[i]->setG(hero.getGold());
+				reset = true;
+			}
+		}
+
+		if (!reset) {
+			GameInfo* currSave = new GameInfo(hero.getName(), lvlMult, critCLvl, critMLvl, healLvl, boss.getLevel(), hero.getLevel(), hero.getGold());
+			saves.push_back(currSave);
+		}
+
+		input.close();
+
+
+		//create object to reset file
+		ofstream output;
+		output.open("File.in", ios::trunc);
+
+		//make sure fin is initialized to the file
+		if (!output) {
+			cerr << "File not found" << endl;
+			exit(1);
+		}
+
+		for (int i = 0; i < saves.size(); i++) {
+			output << saves[i]->getName() << " " << saves[i]->getLM() << " " << saves[i]->getCCL() << " " << saves[i]->getCML() << " " << saves[i]->getHealLevel() << " " << saves[i]->getBL() << " " << saves[i]->getHL() << " " << saves[i]->getG() << "\n";
+		}
+
+		output.close();
+
+	}
+
+
+
 	void resetEnemy() {
 		//setting enemy starts to 80% of hero stats
 		enemy.setDamage(floor(.8 * hero.getDamage()));
@@ -437,10 +555,13 @@ public:
 
 
 	//refresh all the stats (to be used after file input to simplify setting)
-	void refreshAll(string n = "Phil", double lm = 1, double ccl = 1, double cml = 1, double healLevel = 1, double bl = 1, double hl = 1) {
+	void refreshAll(string n = "Phil", double lm = 1, double ccl = 1, double cml = 1, double healLevel = 1, double bl = 1, double hl = 1, double g = 0) {
 		hero.setName(n);
+		hero.setGold(g);
 		hero.setLevel(hl);
 		hero.refresh();
+
+		resetEnemy();
 
 		boss.setLevel(bl);
 		boss.refresh();
