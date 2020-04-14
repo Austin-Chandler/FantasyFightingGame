@@ -21,9 +21,9 @@ Things Done:
 	isWinner()
 	Gold functionality
 	Level functionality
+	Shop
 Things left to do:
 	Neccesary ASAP:
-		Shop
 		Save
 		Load player
 		Victory message when 10 bosses beaten
@@ -35,6 +35,7 @@ Things left to do:
 		Help (if time)
 		Map
 		Extra story with some bosses
+		show how much more gold need to buy shop item
 */
 
 class Game {
@@ -44,10 +45,11 @@ private:
 	Boss boss;
 	Hero hero;
 
-	//other vars
-	double lvlMult = 1;
+	//other vars (for shop)
+	double lvlMult, critCLvl, critMLvl, healLvl;
 public:
 	Game() {
+		lvlMult = critCLvl = critMLvl = healLvl = 1;
 		srand(time(NULL));
 	}
 
@@ -114,7 +116,8 @@ public:
 
 			//shop
 			if (input == "s") {
-				cout << "You went to the shop" << endl; //set color here to 8E (light yellow on grey)
+				cout << "You went to the shop" << endl;
+				shop();
 			}
 
 			//forest
@@ -155,6 +158,83 @@ public:
 				cout << "Exit" << endl;
 			}
 		} while (input != "e" && !isWinner());
+	}
+
+
+
+	void shop() {
+		system("color 8E"); //light yellow on grey text (8E)
+		cout << "Welcome to ye ol' butikken! Have a look at ma wares and let me know if ya wanta buy anything." << endl;
+		char input = ' ';
+		do {
+			displayShopItems();
+			cin >> input;
+			while (input != '1' && input != '2' && input != '3' && input != '4' && input != 'l') {
+				cout << "Please enter 1, 2, 3, 4, or l (case sensitive): ";
+				cin >> input;
+			}
+			if (input == '1') {
+				if (hero.getGold() >= (lvlMult * 150)) {
+					cout << "Here ya go! Thanks for your purchase!" << endl << endl;
+					hero.setGold(hero.getGold() - (lvlMult * 150));
+					lvlMult++;
+				}
+				else {
+					cout << "I gotta make a living here! Come back when you have to cover this" << endl << endl;
+				}
+			}
+			else if (input == '2') {
+				if (hero.getGold() >= (critCLvl * 30)) {
+					if (critCLvl == 10) { //This stops crit chance at 50% 
+						cout << "Sorry! I'm all out!" << endl << endl;
+					}
+					else {
+						cout << "Here ya go! Thanks for your purchase!" << endl << endl;
+						hero.setGold(hero.getGold() - (critCLvl * 30));
+						critCLvl++;
+						hero.setCritChance(0.05 * (critCLvl - 1));
+					}
+				}
+				else {
+					cout << "I gotta make a living here! Come back when you have to cover this" << endl << endl;
+				}
+			}
+			else if (input == '3') {
+				if (hero.getGold() >= (critMLvl * 25)) {
+					cout << "Here ya go! Thanks for your purchase!" << endl << endl;
+					hero.setGold(hero.getGold() - (critMLvl * 25));
+					critMLvl++;
+					hero.setCritMult((.3 * (critCLvl - 1)) + 2);
+				}
+				else {
+					cout << "I gotta make a living here! Come back when you have to cover this" << endl << endl;
+				}
+			}
+			else if (input == '4') {
+				if (hero.getGold() >= (healLvl * 35)) {
+					cout << "Here ya go! Thanks for your purchase!" << endl << endl;
+					hero.setGold(hero.getGold() - (healLvl * 35));
+					healLvl++;
+					hero.setHeal((5 * (healLvl - 1)) + 5);
+				}
+				else {
+					cout << "I gotta make a living here! Come back when you have to cover this" << endl << endl;
+				}
+			}
+			else if (input == 'l') {
+				cout << "Come back soon!" << endl << endl;
+			}
+		} while (input != 'l');
+	}
+
+
+
+	void displayShopItems() {
+		cout << "1. This here will make you level up an extra level every time you would normally level up. (level " << lvlMult << ", total levels each level up: " << lvlMult << ") Cost: " << (lvlMult * 150) << endl; //****Add cost in here somehow****
+		cout << "2. Now that there is a fancy one. It increases your critical chance by 5% (level " << critCLvl << ", cc = " << (hero.getCritChance() * 100) << "%) Cost: " << (critCLvl * 30) << endl;
+		cout << "3. That is also very useful. It increases your critical multiplier by .3 (level " << critMLvl << ", cm = " << hero.getCritMult() << ") Cost: " << (critMLvl * 25) << endl;
+		cout << "4. I thought you'd like that. It boosts your healing by 5. (level " << healLvl << ", healing = " << hero.getHeal() << ") Cost: " << (healLvl * 35) << endl;
+		cout << "So, You've seen what I got. What do ya wanta buy? (You currently have " << hero.getGold() << " gold) (1, 2, 3, 4, or l (leave shop)): ";
 	}
 
 
@@ -250,7 +330,6 @@ public:
 				else {
 					boss.setHp(boss.getHp() - (hero.getDamage() - boss.getArmor()) + boss.getHpRegen());
 					cout << "You attacked the boss for " << (hero.getDamage() - boss.getArmor()) << " damage!" << endl;
-					cout << "The boss healed himself for " << boss.getHpRegen() << " hp!" << endl;
 				}
 				if (boss.getHp() <= 0) {
 					cout << "You defeated the boss!" << endl;
@@ -311,6 +390,12 @@ public:
 		if (hero.getLevel() % 10 == 0) { //every 10 hero levels increase the gold drop chance chance from the enemy
 			enemy.setGoldDropChance(enemy.getGoldDropChance() + 1);
 		}
+	}
+
+
+
+	void refreshAll() {
+
 	}
 
 
