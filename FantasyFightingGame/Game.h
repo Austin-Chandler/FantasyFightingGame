@@ -29,11 +29,12 @@ Things Done:
 	Victory message when 10 bosses beaten
 	Load player
 	Save
+	Patch it all together to make a cohesive game :)
+	Squash Bugs
 Things left to do:
 	Neccesary ASAP:
 	Neccesary when all else is done:
 		Squash bugs
-		Patch it all together to make a cohesive game :)
 	Non-neccisities (to add if I have time and desire):
 		Help menu
 		Map
@@ -53,13 +54,16 @@ private:
 	double lvlMult, critCLvl, critMLvl, healLvl;
 public:
 	Game() {
+		//setting the default shop levels to 1
 		lvlMult = critCLvl = critMLvl = healLvl = 1;
 		srand(time(NULL));
 	}
 
 
 
+	//main method
 	void playGame() {
+		//if they want to load a player do so; if they say load but don't load any, create a new one (Phil is the default name)
 		if (welcomeScreen()) {
 			loadPlayer();
 			if (hero.getName() == "Phil") {
@@ -82,6 +86,7 @@ public:
 
 
 
+	//determines if they want to load a player
 	bool welcomeScreen() {
 		char input = ' ';
 		cout << "Hello! Welcome to: Sannhet's Legacy! Would you like to load a character? (Y/N)" << endl;
@@ -100,6 +105,7 @@ public:
 
 
 
+	//tells a stroy
 	void storyline() {
 		cout << "A long time ago there was a great chief named Sannhet. He ruled all the land, as far as the eye could see." << endl;
 		cout << "However, unbeknownst to him, a challenger was waiting to overthrow him. His name was Bedrageri. Bedrageri" << endl;
@@ -113,6 +119,7 @@ public:
 
 
 
+	//checks to see if 10 bosses have been beaten
 	bool isWinner() {
 		if (boss.getLevel() == 11) {
 			system("color 80");
@@ -127,6 +134,7 @@ public:
 
 
 
+	//main loop for user input and other functions
 	void main() {
 		string input = "";
 		do {
@@ -183,6 +191,7 @@ public:
 
 			//exit
 			else if (input == "e") {
+				//do they want to save before they go
 				cout << "Would you like to save? (Y/N)" << endl;
 				cin >> input;
 				while (input != "Y" && input != "y" && input != "N" && input != "n") {
@@ -204,6 +213,7 @@ public:
 
 
 
+	//where the player can buy upgrades 
 	void shop() {
 		system("color 8E"); //light yellow on grey text (8E)
 		cout << "Welcome to ye ol' butikken! Have a look at ma wares and let me know if ya wanta buy anything." << endl;
@@ -215,6 +225,8 @@ public:
 				cout << "Please enter 1, 2, 3, 4, or L (case sensitive): ";
 				cin >> input;
 			}
+
+			//extra levels
 			if (input == '1') {
 				if (hero.getGold() >= (lvlMult * 150)) {
 					cout << "Here ya go! Thanks for your purchase!" << endl << endl;
@@ -225,6 +237,8 @@ public:
 					cout << "I gotta make a living here! Come back when you have to cover this" << endl << endl;
 				}
 			}
+
+			//crit chance
 			else if (input == '2') {
 				if (hero.getGold() >= (critCLvl * 30)) {
 					if (critCLvl == 11) { //This stops crit chance at 50% 
@@ -241,6 +255,8 @@ public:
 					cout << "I gotta make a living here! Come back when you have to cover this" << endl << endl;
 				}
 			}
+
+			//crit mult
 			else if (input == '3') {
 				if (hero.getGold() >= (critMLvl * 25)) {
 					cout << "Here ya go! Thanks for your purchase!" << endl << endl;
@@ -252,6 +268,8 @@ public:
 					cout << "I gotta make a living here! Come back when you have to cover this" << endl << endl;
 				}
 			}
+
+			//extra heal
 			else if (input == '4') {
 				if (hero.getGold() >= (healLvl * 35)) {
 					cout << "Here ya go! Thanks for your purchase!" << endl << endl;
@@ -263,6 +281,8 @@ public:
 					cout << "I gotta make a living here! Come back when you have to cover this" << endl << endl;
 				}
 			}
+
+			//leaving the shop
 			else if (input == 'L') {
 				cout << "Come back soon!" << endl << endl;
 			}
@@ -271,6 +291,7 @@ public:
 
 
 
+	//showing whats in the shop
 	void displayShopItems() {
 		cout << "1. This here will make you level up an extra level every time you would normally level up. (level " << lvlMult << ", total levels each level up: " << lvlMult << ") Cost: " << (lvlMult * 150) << endl; //****Add cost in here somehow****
 		cout << "2. Now that there is a fancy one. It increases your critical chance by 5% (level " << critCLvl << ", cc = " << (hero.getCritChance() * 100) << "%) Cost: " << (critCLvl * 30) << endl;
@@ -281,6 +302,7 @@ public:
 
 
 
+	//fighting bad guys in the forest
 	void forest() {
 		char input = ' ';
 		do {
@@ -289,6 +311,7 @@ public:
 			hero.displayStats();
 			cout << "What would you like to do: Run [leave the forest] (r), Attack (a), or Heal yourself (h)?" << endl;
 			cin >> input;
+			//wrong input
 			while (input != 'r' && input != 'a' && input != 'h') {
 				cout << "Please enter r, a, or h (case sensitive): ";
 				cin >> input;
@@ -305,6 +328,7 @@ public:
 					enemy.setHp(enemy.getHp() - (hero.getDamage() - enemy.getArmor()));
 					cout << "You attacked the baddie for " << (hero.getDamage() - enemy.getArmor()) << " damage!" << endl;
 				}
+				//is enemy dead?
 				if (enemy.getHp() <= 0) {
 					cout << "You defeated the baddie!" << endl << endl;
 					hero.setLevel(hero.getLevel() + lvlMult);
@@ -314,8 +338,10 @@ public:
 					resetEnemy();
 				}
 				else {
+					//enemy attack
 					hero.setHp(hero.getHp() - (enemy.getDamage() - hero.getArmor()));
 					cout << "The baddie attacked you for " << (enemy.getDamage() - hero.getArmor()) << " damage!" << endl;
+					//is hero dead?
 					if (hero.getHp() <= 0) {
 						double holdGold = hero.getGold();
 						hero.setGold(hero.getGold() - enemy.getMaxGoldDrop());
@@ -337,6 +363,7 @@ public:
 				cout << "You healed yourself for " << (hero.getHp() - holdHealth) << " health points!" << endl;
 				hero.setHp(hero.getHp() - (enemy.getDamage() - hero.getArmor()));
 				cout << "The baddie attacked you for " << (enemy.getDamage() - hero.getArmor()) << " damage!" << endl;
+				//is hero dead?
 				if (hero.getHp() <= 0) {
 					double holdGold = hero.getGold();
 					hero.setGold(hero.getGold() - enemy.getMaxGoldDrop());
@@ -352,6 +379,7 @@ public:
 
 
 
+	//boss fight(s)
 	void bossFight() {
 		char input = ' ';
 		do {
@@ -360,6 +388,7 @@ public:
 			hero.displayStats();
 			cout << "What would you like to do: Attack (a) or Heal yourself (h)?" << endl;
 			cin >> input;
+			//wrong input
 			while (input != 'a' && input != 'h') {
 				cout << "Please enter a, or h (case sensitive): ";
 				cin >> input;
@@ -373,6 +402,7 @@ public:
 					boss.setHp(boss.getHp() - (hero.getDamage() - boss.getArmor()) + boss.getHpRegen());
 					cout << "You attacked the boss for " << (hero.getDamage() - boss.getArmor()) << " damage!" << endl;
 				}
+				//is boss dead?
 				if (boss.getHp() <= 0) {
 					cout << "You defeated the boss!" << endl;
 					cout << "The boss leveled up! He is now level " << (boss.getLevel() + 1) << "!" << endl << endl;
@@ -381,7 +411,7 @@ public:
 					boss.refresh();
 				}
 				else {
-					double holdBossHealth;
+					double holdBossHealth; //to get boss heal
 					holdBossHealth = boss.getHp();
 					boss.setHp(boss.getHp() + boss.getHpRegen());
 					if (boss.getHp() > boss.getMaxHp()) {
@@ -390,6 +420,7 @@ public:
 					cout << "The boss healed himself for " << (boss.getHp() - holdBossHealth) << " hp!" << endl;
 					hero.setHp(hero.getHp() - (boss.getDamage() - hero.getArmor()));
 					cout << "The boss attacked you for " << (boss.getDamage() - hero.getArmor()) << " damage!" << endl;
+					//is hero dead?
 					if (hero.getHp() <= 0) {
 						double holdGold = hero.getGold();
 						hero.setGold(hero.getGold() - floor(boss.getGold() / 2));
@@ -418,6 +449,7 @@ public:
 				cout << "The boss healed himself for " << (boss.getHp() - holdBossHealth) << " hp!" << endl;
 				hero.setHp(hero.getHp() - (boss.getDamage() - hero.getArmor()));
 				cout << "The boss attacked you for " << (boss.getDamage() - hero.getArmor()) << " damage!" << endl;
+				//is hero dead?
 				if (hero.getHp() <= 0) {
 					double holdGold = hero.getGold();
 					hero.setGold(hero.getGold() - floor(boss.getGold() / 2));
@@ -432,6 +464,7 @@ public:
 
 
 
+	//loading a player in
 	void loadPlayer() {
 		//creat object to read file
 		ifstream fin("File.in");
@@ -442,6 +475,7 @@ public:
 			exit(1);
 		}
 
+		//set some holders
 		string heroName;
 		double lm, ccl, cml, healLevel, bl, hl, g;
 
@@ -449,6 +483,7 @@ public:
 
 		char input = ' ';
 		do {
+			//load stuff into holders and ask user if they want to load that player
 			while (fin >> heroName >> lm >> ccl >> cml >> healLevel >> bl >> hl >> g) {
 				cout << "Would you like to load " << heroName << "? (Y/N) ";
 				cin >> input;
@@ -469,6 +504,7 @@ public:
 			if (!loaded) {
 				cout << "No players were loaded. Would you like to create one? (No forces quit) (Y/N) ";
 				cin >> input;
+				//force quit if no players loaded or created
 				if (input == 'N' || input == 'n') {
 					cerr << "No player loaded or created. Force quit" << endl;
 					exit(2);
@@ -482,6 +518,7 @@ public:
 
 
 
+	//saving the game
 	void save() {
 		//file stream object to read file into a vector
 		ifstream input;
@@ -491,9 +528,10 @@ public:
 		double lm, ccl, cml, healLevel, bl, hl, g;
 		bool reset = false;
 
-		//make vector of GameInfos
+		//make vector of GameInfos to hold saves
 		vector<GameInfo*> saves;
 
+		//put file contents into vector
 		while (input >> heroName >> lm >> ccl >> cml >> healLevel >> bl >> hl >> g) {
 			GameInfo* currSave = new GameInfo(heroName, lm, ccl, cml, healLevel, bl, hl, g);
 			saves.push_back(currSave);
@@ -513,15 +551,17 @@ public:
 			}
 		}
 
+		//if the player doesn't already exist make new object and push onto vector
 		if (!reset) {
 			GameInfo* currSave = new GameInfo(hero.getName(), lvlMult, critCLvl, critMLvl, healLvl, boss.getLevel(), hero.getLevel(), hero.getGold());
 			saves.push_back(currSave);
 		}
 
+		//close the input file
 		input.close();
 
 
-		//create object to reset file
+		//create object to reset file and trunc
 		ofstream output;
 		output.open("File.in", ios::trunc);
 
@@ -531,16 +571,19 @@ public:
 			exit(1);
 		}
 
+		//write to file
 		for (int i = 0; i < saves.size(); i++) {
 			output << saves[i]->getName() << " " << saves[i]->getLM() << " " << saves[i]->getCCL() << " " << saves[i]->getCML() << " " << saves[i]->getHealLevel() << " " << saves[i]->getBL() << " " << saves[i]->getHL() << " " << saves[i]->getG() << "\n";
 		}
 
+		//close the file and tell user it was saved
 		output.close();
 		cout << "Saved the game" << endl;
 	}
 
 
 
+	//reseting the enemy's stats when the hero levels up
 	void resetEnemy() {
 		//setting enemy starts to 80% of hero stats
 		enemy.setDamage(floor(.8 * hero.getDamage()));
@@ -578,6 +621,7 @@ public:
 
 
 
+	//displaying all stats of all objects 
 	void displayAll() {
 		enemy.displayStats();
 		boss.displayStats();

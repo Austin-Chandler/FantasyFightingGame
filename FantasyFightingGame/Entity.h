@@ -6,6 +6,7 @@ class Entity {
 private:
 	double damage, armor, hp, maxHp;
 public:
+	//setting inital values
 	Entity(double d = 0, double a = 0, double health = 0, double maxHealth = 0) {
 		damage = d;
 		armor = a;
@@ -24,7 +25,7 @@ public:
 	void setMaxHp(double maxHealth) { maxHp = maxHealth; }
 
 	//making Entity an abstract class and setting up polymorphism
-	virtual void displayStats() = 0; 
+	virtual void displayStats() = 0;
 };
 
 #endif

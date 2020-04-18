@@ -8,6 +8,7 @@ private:
 	string heroName;
 	double lvlMult, critCLvl, critMLvl, healLvl, bossLvl, heroLvl, heroGold;
 public:
+	//setting some inital values (should never be used, will always take input)
 	GameInfo(string n = " ", double lm = 1, double ccl = 1, double cml = 1, double healLevel = 1, double bl = 1, double hl = 1, double g = 0) {
 		heroName = n;
 		lvlMult = lm;

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-//boss inheriting from entity
+//boss class inheriting from entity
 class Boss : public Entity {
 private:
 	int level;

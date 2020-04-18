@@ -18,7 +18,7 @@ public:
 		setArmor(a);
 		setHp(health);
 		setMaxHp(maxHealth);
-		goldDropChance = gdc;//1 / (9-GDC) chance (if 9, 100% chance) (17% here)
+		goldDropChance = gdc;//1 / (9-GDC) chance (if 9, 100% chance) (17% here based on the default 3)
 		maxGoldDrop = mgd;
 		srand(time(NULL));
 	}
@@ -31,6 +31,7 @@ public:
 
 
 	//other functions
+	//calculating how much gold the enemy dropped
 	double goldDropped() {
 		//picking a random number between 0 and 9, if it is less than or equal to the chance drop full gold
 		if ((rand() % 10) <= goldDropChance) {
