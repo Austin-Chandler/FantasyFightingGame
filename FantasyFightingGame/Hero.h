@@ -26,7 +26,7 @@ public:
 		healing = heal;
 		gold = g;
 	}
-
+	
 	//setters and getters... so many setters and getters...
 	double getCritChance() const { return critChance; }
 	double getCritMult() const { return critMult; }

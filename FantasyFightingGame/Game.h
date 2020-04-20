@@ -548,6 +548,7 @@ public:
 				saves[i]->setHL(hero.getLevel());
 				saves[i]->setG(hero.getGold());
 				reset = true;
+				break;
 			}
 		}
 
